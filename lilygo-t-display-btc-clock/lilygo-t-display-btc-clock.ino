@@ -31,7 +31,7 @@ bool sync_OK = false, freshStart = true;
 uint8_t count;
 
 void setup() {
-  Serial.begin(115200); //added by Cody
+  Serial.begin(115200); //Select the baud range where serial output will be printed
   flash.begin("my-clock", true);       // read from flash, true = read only
   count = flash.getInt("counter", 0);  // retrieve the last set time zone - default to first in the array [0]
   flash.end();
