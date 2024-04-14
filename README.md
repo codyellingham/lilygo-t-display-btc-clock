@@ -17,7 +17,7 @@ Combines the date, clock, and wifi functions of [https://espgo.be/index-en.html]
 - A LilyGogo T-display 
 - Arduino IDE
 
-Setup instructions are for Mac. Windows and Linux will be very similar but may be easier as I had some issues getting the LilyGo T-display drivers working at first.
+Setup steps are for Mac. Windows and Linux will be very similar but may be easier as I had some issues getting the LilyGo T-display drivers working at first.
 
 ### Setup Steps
 
@@ -27,6 +27,7 @@ Setup instructions are for Mac. Windows and Linux will be very similar but may b
 
 3. Add Arduino settings for the ESP32 boards "Preferences" > "Additional Boards Manager".  
   Paste in this url: `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
+!["Additional boards"](https://github.com/codyellingham/lilygo-t-display-btc-clock/blob/master/images/additional-boards.png?raw=true)
 
 4. Add the required Arduino libraries in the Arduino package manager by going "Sketch" > "Include Library" > "Manage Library".  
 Libraries to add:
