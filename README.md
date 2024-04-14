@@ -25,7 +25,7 @@ Setup instructions are for Mac. Windows and Linux will be very similar but may b
 
 2. Install Arduino IDE: [https://www.arduino.cc/en/software/](https://www.arduino.cc/en/software/)
 
-3. Add Arduino settings for the ESP32 boards "Preferences" > "Additional Boards Manager":
+3. Add Arduino settings for the ESP32 boards "Preferences" > "Additional Boards Manager".  
   Paste in this url: `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
 
 4. Add the required Arduino libraries in the Arduino package manager by going "Sketch" > "Include Library" > "Manage Library".
