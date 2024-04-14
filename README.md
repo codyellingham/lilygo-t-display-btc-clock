@@ -28,9 +28,8 @@ Setup instructions are for Mac. Windows and Linux will be very similar but may b
 3. Add Arduino settings for the ESP32 boards "Preferences" > "Additional Boards Manager".  
   Paste in this url: `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
 
-4. Add the required Arduino libraries in the Arduino package manager by going "Sketch" > "Include Library" > "Manage Library".
-  
-  Libraries to add:
+4. Add the required Arduino libraries in the Arduino package manager by going "Sketch" > "Include Library" > "Manage Library".  
+Libraries to add:
   - ArduinoJson by Benoit Blanchon
   - Preferences by Volodymr Shymanskyy
   - TFT_eSPI by Bodmer
@@ -39,11 +38,10 @@ Setup instructions are for Mac. Windows and Linux will be very similar but may b
 5. Update the TFT_eSPI user settings by opening the Arduino library folder, located on mac at `[Username]/Documents/Arduino/Libraries/TFT_eSPI/User_Setup_Select.h`
 - Uncomment line 58 "#include <User_Setups/Setup25_TTGO_T_Display.h> " (or whichever specific device it is you have).
 
-5. Download and open the sketch in this repo `lilygo-t-display-btc-clock/lilygo-t-display-btc-clock.ino` to your Arduino folder at `[Username]/Documents/Arduino/`
+5. Download and copy the file `lilygo-t-display-btc-clock/lilygo-t-display-btc-clock.ino` to your Arduino folder at `[Username]/Documents/Arduino/`
   - Change Line 25 to be your City name and Line 26 to your [time zone](https://manpages.ubuntu.com/manpages/focal/man3/DateTime::TimeZone::Catalog.3pm.html)
 
-6. Setup your board: "Tools" > "Board" > "ESP32" > "LilyGo T-Display"
-You may also need to change the ports. For me it was 
+6. Setup your board: "Tools" > "Board" > "ESP32" > "LilyGo T-Display". The device should now show up as connected in the top left. If not you may also need to try changing the ports to one of the other options from the menu. For me it was '/dev/cu.wchusbserial56230381151`.
 !["board settings"](https://github.com/codyellingham/lilygo-t-display-btc-clock/blob/master/images/board-port-settings.png?raw=true)
 All other settings should be OK as defaults.
 
