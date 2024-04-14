@@ -4,9 +4,9 @@
 
 !["Lilygo t-display case"](https://github.com/codyellingham/lilygo-t-display-btc-clock/blob/master/images/package.jpg?raw=true)
 
-**Setup a live Bitcoin price ticker and clock / date ticker on a LilyGo T-display.**
+**Setup a live Bitcoin price ticker and clock / date display on a LilyGo T-display.**
 
-Combines the Date, clock, and wifi functions of [https://espgo.be/index-en.html](https://espgo.be/index-en.html) with the Bitcoin price tracker of [https://how2electronics.com/bitcoin-price-tracker-using-esp32-oled-display/](https://how2electronics.com/bitcoin-price-tracker-using-esp32-oled-display/ ) 
+Combines the date, clock, and wifi functions of [https://espgo.be/index-en.html](https://espgo.be/index-en.html) with the Bitcoin price tracker of [https://how2electronics.com/bitcoin-price-tracker-using-esp32-oled-display/](https://how2electronics.com/bitcoin-price-tracker-using-esp32-oled-display/ ) 
 
 #### Notes: 
 - This may work with similar LilyGo models, but I have only tested on the LilyGo T-display v1.1
@@ -38,16 +38,17 @@ Libraries to add:
 5. Update the TFT_eSPI user settings by opening the Arduino library folder, located on mac at `[Username]/Documents/Arduino/Libraries/TFT_eSPI/User_Setup_Select.h`
 - Uncomment line 58 "#include <User_Setups/Setup25_TTGO_T_Display.h> " (or whichever specific device it is you have).
 
-5. Download and copy the file `lilygo-t-display-btc-clock/lilygo-t-display-btc-clock.ino` to your Arduino folder at `[Username]/Documents/Arduino/`
+5. Download and open the file `lilygo-t-display-btc-clock/lilygo-t-display-btc-clock.ino` to your Arduino folder at `[Username]/Documents/Arduino/`
   - Change Line 25 to be your City name and Line 26 to your [time zone](https://manpages.ubuntu.com/manpages/focal/man3/DateTime::TimeZone::Catalog.3pm.html)
 
-6. Setup your board: "Tools" > "Board" > "ESP32" > "LilyGo T-Display". The device should now show up as connected in the top left. If not you may also need to try changing the ports to one of the other options from the menu. For me it was '/dev/cu.wchusbserial56230381151`.
+6. Setup your board: "Tools" > "Board" > "ESP32" > "ESP32 Dev Module". The device should now show up as connected in the top left with a USB icon. If this does not work you might need to try changing the ports to one of the other options from the menu. For me it was '/dev/cu.wchusbserial56230381151`.
 !["board settings"](https://github.com/codyellingham/lilygo-t-display-btc-clock/blob/master/images/board-port-settings.png?raw=true)
 All other settings should be OK as defaults.
+If things are not showing up or working as expected try restarting the Arduino IDE or the computer or try a different USB port or cable.
 
 7. Click the "Upload" button.
 !["Upload"](https://github.com/codyellingham/lilygo-t-display-btc-clock/blob/master/images/upload.png?raw=true)
 
 8. The code should verify then upload and the the LilyGo will restart and prompt you to set wifi password by logging in to the temporary access point "Lily" and selecting your wifi network from there.
 
-9. Done
+9. Done.
