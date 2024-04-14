@@ -30,8 +30,8 @@ Setup steps are for Mac. Windows and Linux will be very similar but may be easie
 
 !["Additional boards"](https://github.com/codyellingham/lilygo-t-display-btc-clock/blob/master/images/additional-boards-input.png?raw=true)
 
-4. Add the required Arduino libraries in the Arduino package manager by going "Sketch" > "Include Library" > "Manage Library".
-  
+4. Add the required Arduino libraries in the Arduino Library Manager by going "Sketch" > "Include Library" > "Manage Library".
+
 **Libraries to add:**
   - ArduinoJson by Benoit Blanchon
   - Preferences by Volodymr Shymanskyy
