@@ -45,6 +45,7 @@ Setup steps are for Mac. Windows and Linux will be very similar but may be easie
   - Change Line 25 to be your City name and Line 26 to your [time zone](https://manpages.ubuntu.com/manpages/focal/man3/DateTime::TimeZone::Catalog.3pm.html)
 
 6. Setup your board: "Tools" > "Board" > "ESP32" > "ESP32 Dev Module". The device should now show up as connected in the top left with a USB icon. If this does not work you might need to try changing the ports to one of the other options from the menu. For me it was '/dev/cu.wchusbserial56230381151`.
+
 !["board settings"](https://github.com/codyellingham/lilygo-t-display-btc-clock/blob/master/images/board-port-settings.png?raw=true)
 All other settings should be OK as defaults.
 If things are not showing up or working as expected try restarting the Arduino IDE or the computer or try a different USB port or cable.
