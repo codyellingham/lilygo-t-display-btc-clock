@@ -41,7 +41,7 @@ Setup steps are for Mac. Windows and Linux will be very similar but may be easie
 5. Update the TFT_eSPI user settings by opening the Arduino library folder, located on mac at `[Username]/Documents/Arduino/Libraries/TFT_eSPI/User_Setup_Select.h`
 - Uncomment line 58 "#include <User_Setups/Setup25_TTGO_T_Display.h> " (or whichever specific device it is you have).
 
-5. Download and open the file `lilygo-t-display-btc-clock/lilygo-t-display-btc-clock.ino` to your Arduino folder at `[Username]/Documents/Arduino/`
+5. Download and open the repo and open the file `lilygo-t-display-btc-clock/lilygo-t-display-btc-clock.ino` to your Arduino folder at `[Username]/Documents/Arduino/`
   - Change Line 25 to be your City name and Line 26 to your [time zone](https://manpages.ubuntu.com/manpages/focal/man3/DateTime::TimeZone::Catalog.3pm.html)
 
 6. Setup your board: "Tools" > "Board" > "ESP32" > "ESP32 Dev Module". The device should now show up as connected in the top left with a USB icon. If this does not work you might need to try changing the ports to one of the other options from the menu. For me it was '/dev/cu.wchusbserial56230381151`.
