@@ -21,6 +21,8 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 TFT_eSprite leftSp = TFT_eSprite(&tft);
 TFT_eSprite rightS = TFT_eSprite(&tft);
 
+String BTCUSDPrice;  // Global variable
+
 const char* weekdays[] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 const char* location[] = { "Tokyo" };  // Your City Name
 const char* timeZone[] = { "JST-9" }; // Your time zone (refer to https://manpages.ubuntu.com/manpages/focal/man3/DateTime::TimeZone::Catalog.3pm.html)
@@ -48,69 +50,96 @@ void setup() {
   configTzTime(timeZone[count], "pool.ntp.org");  // set the time zone
 }
 
+enum State {
+  GET_PRICE,
+  GET_HISTORY,
+  DISPLAY_TIME
+};
+
+State currentState = GET_PRICE;
+unsigned long lastRequestTime = 0;
+const unsigned long requestInterval = 500;  // 0.5 seconds
+
 void loop() {
-  //get the price
-  http.begin(url);
-  int httpCode = http.GET();                                                            //Get crypto price from API
-  StaticJsonDocument<2000> doc;
-  DeserializationError error = deserializeJson(doc, http.getString());
- 
-  if (error)                                                                            //Display error message if unsuccessful
-  {
-    Serial.print(F("deserializeJson Failed"));
-    Serial.println(error.f_str());
-    delay(2500);
-    return;
+  switch (currentState) {
+    case GET_PRICE:
+      if (millis() - lastRequestTime >= requestInterval) {
+        http.begin(url);
+        int httpCode = http.GET();
+        
+        if (httpCode > 0) {
+          StaticJsonDocument<2000> doc;
+          DeserializationError error = deserializeJson(doc, http.getString());
+          
+          if (error) {
+            Serial.print(F("deserializeJson Failed"));
+            Serial.println(error.f_str());
+          } else {
+            BTCUSDPrice = doc["bpi"]["USD"]["rate_float"].as<String>();
+            float priceFloat = BTCUSDPrice.toFloat();
+            int priceInt = (int)priceFloat;
+            BTCUSDPrice = String(priceInt);
+            
+            Serial.print("HTTP Status Code: ");
+            Serial.println(httpCode);
+            Serial.print("BTCUSD Price: ");
+            Serial.println(BTCUSDPrice.toDouble());
+          }
+        } else {
+          Serial.printf("HTTP request failed with error %d\n", httpCode);
+        }
+        
+        http.end();
+        currentState = GET_HISTORY;
+        lastRequestTime = millis();
+      }
+      break;
+      
+    case GET_HISTORY:
+      if (millis() - lastRequestTime >= requestInterval) {
+        http.begin(historyURL);
+        int historyHttpCode = http.GET();
+        
+        if (historyHttpCode > 0) {
+          StaticJsonDocument<2000> historyDoc;
+          DeserializationError historyError = deserializeJson(historyDoc, http.getString());
+          
+          if (historyError) {
+            Serial.print(F("deserializeJson(History) failed"));
+            Serial.println(historyError.f_str());
+          } else {
+            JsonObject bpi = historyDoc["bpi"].as<JsonObject>();
+            double yesterdayPrice;
+            for (JsonPair kv : bpi) {
+              yesterdayPrice = kv.value().as<double>();
+            }
+            
+            Serial.print("History HTTP Status Code: ");
+            Serial.println(historyHttpCode);
+            Serial.print("Yesterday's BTCUSD Price: ");
+            Serial.println(yesterdayPrice);
+          }
+        } else {
+          Serial.printf("HTTP request for history failed with error %d\n", historyHttpCode);
+        }
+        
+        http.end();
+        currentState = DISPLAY_TIME;
+        lastRequestTime = millis();
+      }
+      break;
+      
+    case DISPLAY_TIME:
+      displayTime();  // Assuming BTCUSDPrice is a global variable
+      currentState = GET_PRICE;
+      lastRequestTime = millis();
+      break;
   }
- 
-  Serial.print("HTTP Status Code: ");
-  Serial.println(httpCode);
- 
-  String BTCUSDPrice = doc["bpi"]["USD"]["rate_float"].as<String>();                    //Store crypto price and update date in local variables
-
-  // Convert string to float
-  float priceFloat = BTCUSDPrice.toFloat();
-
-  // Convert float to integer to remove decimal places
-  int priceInt = (int)priceFloat;
-
-  // Convert integer back to string
-  BTCUSDPrice = String(priceInt);
-
-  String lastUpdated = doc["time"]["updated"].as<String>();
-  http.end();
- 
-  Serial.print("Getting history...");
-  StaticJsonDocument<2000> historyDoc;
-  http.begin(historyURL);                                                               //Get historical crypto price from API
-  int historyHttpCode = http.GET();
-  DeserializationError historyError = deserializeJson(historyDoc, http.getString());
- 
-  if (historyError) {                                                                   //Display error message if unsuccessful
-    Serial.print(F("deserializeJson(History) failed"));
-    Serial.println(historyError.f_str());
-    delay(2500);
-    return;
-  }
- 
-  Serial.print("History HTTP Status Code: ");
-  Serial.println(historyHttpCode);
-  JsonObject bpi = historyDoc["bpi"].as<JsonObject>();
-  double yesterdayPrice;
-  for (JsonPair kv : bpi) {
-    yesterdayPrice = kv.value().as<double>();                                           //Store yesterday's crypto price
-  }
- 
-  Serial.print("BTCUSD Price: ");                                                       //Display current price on serial monitor
-  Serial.println(BTCUSDPrice.toDouble());
- 
-  http.end();   
-
-  displayTime(BTCUSDPrice);    
-
-  //if (!digitalRead(35)) switchTimeZone();  // bottom button
-  if (!digitalRead(0)) deepSleep();        // top button
+  
+  // Handle other tasks here (e.g., button presses)
+  if (!digitalRead(0)) deepSleep();  // top button
 }
+
 
 void show_Logo_WiFi() {
   sprite.fillSprite(sprite.color565(100, 100, 100));
@@ -150,7 +179,7 @@ void showMessageNoConnection(WiFiManager* myWiFi) {  // message on display when 
   for (uint8_t i = 0; i < 5; i++) tft.drawCentreString(noConnec[i], 120, i * 27, 4);
 }
 
-void displayTime(String BTCUSDPrice) {
+void displayTime() {
   struct tm tInfo;       // https://cplusplus.com/reference/ctime/tm/
   getLocalTime(&tInfo);  // SNTP update every 3 hours (default ESP32) since we did not set an interval
   if (sync_OK) {         // only display the correct time = after SNTP sync
